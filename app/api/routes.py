@@ -9,15 +9,16 @@ from app.core.embeddings import CustomGeminiEmbedder
 from app.core.vector_store import VectorStore
 from app.core.face_matcher import FaceRecognizer
 from app.core.multimodal import MultimodalMatcher
-from app.config import TEXT_EMBED_DIM, IMAGE_EMBED_DIM, FACE_EMBED_DIM
+from app.config import TEXT_EMBED_DIM, IMAGE_EMBED_DIM, FACE_EMBED_DIM, FAISS_INDEX_DIR
+import os
 
 router = APIRouter()
 
 # تهيئة المكونات العالمية
 embedder = CustomGeminiEmbedder()
-text_store = VectorStore(TEXT_EMBED_DIM)
-image_store = VectorStore(IMAGE_EMBED_DIM)
-face_store = VectorStore(FACE_EMBED_DIM)
+text_store = VectorStore(TEXT_EMBED_DIM, index_path=os.path.join(FAISS_INDEX_DIR, "text"))
+image_store = VectorStore(IMAGE_EMBED_DIM, index_path=os.path.join(FAISS_INDEX_DIR, "image"))
+face_store = VectorStore(FACE_EMBED_DIM, index_path=os.path.join(FAISS_INDEX_DIR, "face"))
 
 try:
     face_recognizer = FaceRecognizer()
@@ -49,6 +50,7 @@ async def add_text(text: str = Form(...), post_id: str = Form(...)):
     try:
         embedding = embedder.get_text_embedding(text)
         text_store.add(np.array(embedding, dtype=np.float32), {"post_id": post_id, "text": text})
+        text_store.save(os.path.join(FAISS_INDEX_DIR, "text"))
         return {"status": "success", "data": {"message": "Text added successfully", "post_id": post_id}}
     except Exception as e:
         print(f"ERROR in add-text: {type(e).__name__}: {e}")
@@ -61,6 +63,7 @@ async def add_image(post_id: str = Form(...), image: UploadFile = File(...)):
         image_bytes = await image.read()
         embedding = embedder.get_image_embedding(image_bytes)
         image_store.add(np.array(embedding, dtype=np.float32), {"post_id": post_id})
+        image_store.save(os.path.join(FAISS_INDEX_DIR, "image"))
         return {"status": "success", "data": {"message": "Image added successfully", "post_id": post_id}}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -75,6 +78,7 @@ async def add_face(person_id: str = Form(...), image: UploadFile = File(...)):
         if embedding is None:
             return {"status": "error", "error": "No face detected in the image"}
         face_store.add(embedding, {"person_id": person_id})
+        face_store.save(os.path.join(FAISS_INDEX_DIR, "face"))
         return {"status": "success", "data": {"message": "Face added successfully", "person_id": person_id}}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

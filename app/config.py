@@ -12,8 +12,8 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("GEMINI_API_KEY not set in environment variables")
 
-TEXT_EMBED_MODEL = os.getenv("TEXT_EMBED_MODEL", "models/embedding-001")
-MULTIMODAL_EMBED_MODEL = os.getenv("MULTIMODAL_EMBED_MODEL", "models/multimodalembedding@001")
+TEXT_EMBED_MODEL = os.getenv("TEXT_EMBED_MODEL", "models/gemini-embedding-001")
+MULTIMODAL_EMBED_MODEL = os.getenv("MULTIMODAL_EMBED_MODEL", "models/gemini-embedding-2-preview")
 FACE_RECOGNITION_THRESHOLD = float(os.getenv("FACE_RECOGNITION_THRESHOLD", 0.6))
 
 # أبعاد المتجهات (حسب نموذج Gemini)

@@ -23,7 +23,8 @@ image = (
         "llama-index-vector-stores-faiss",
         "llama-index-embeddings-gemini",
         "insightface",
-        "onnxruntime"
+        "onnxruntime",
+        "opencv-python-headless"
     )
     # Required for opencv/insightface
     .apt_install("libgl1-mesa-glx", "libglib2.0-0")
@@ -39,8 +40,9 @@ image = (
 @asgi_app()
 def fastapi_app():
     import os
-    # Ensure data directory exists
-    os.makedirs("/data", exist_ok=True)
+    # Point FAISS indexes to the persistent volume so data survives restarts
+    os.environ["FAISS_INDEX_DIR"] = "/data/faiss_indexes"
+    os.makedirs("/data/faiss_indexes", exist_ok=True)
     
     # Import routes and configure app
     from fastapi import FastAPI

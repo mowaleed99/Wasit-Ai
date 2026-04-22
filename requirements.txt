@@ -8,5 +8,7 @@ python-dotenv
 opencv-python-headless
 insightface
 python-multipart
-langchain
+llama-index
+llama-index-vector-stores-faiss
+llama-index-embeddings-gemini
 onnxruntime
