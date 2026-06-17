@@ -1,19 +1,11 @@
-"""
-Main FastAPI application file.
-"""
-import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
+from app.api.routes import router as api_router
 
-from app.api.routes import router
+# Initialize FastAPI app with title and version
+app = FastAPI(title="Wasit AI", version="1.0.0")
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    yield
-
-app = FastAPI(title="Lost and Found AI Backend", lifespan=lifespan)
-
+# Allow cross-origin requests from any frontend (Flutter, web, etc.)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -22,7 +14,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(router, prefix="/api/v1")
+# Include all API routes from the routes file under the /api prefix
+app.include_router(api_router, prefix="/api")
 
-if __name__ == "__main__":
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+# Root endpoint for health check
+@app.get("/")
+async def root():
+    return {"message": "Wasit AI server is running"}

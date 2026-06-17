@@ -1,3 +1,36 @@
-.venv/ 
-.env 
-__pycache__/ 
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables (contains API keys)
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# FAISS index files (binary, should not be in git)
+faiss_indexes/
+*.faiss
+*_meta.json
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter notebooks (if any)
+.ipynb_checkpoints/
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Test assets
+test_face.jpg

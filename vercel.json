@@ -8,12 +8,13 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "app/main.py"
+            "dest": "app.main:app"
         }
     ],
     "env": {
-        "TEXT_EMBED_MODEL": "models/gemini-embedding-001",
-        "MULTIMODAL_EMBED_MODEL": "models/gemini-embedding-2-preview",
+        "GEMINI_API_KEY": "@gemini-api-key",
+        "TEXT_EMBED_MODEL": "models/text-embedding-004",
+        "MULTIMODAL_EMBED_MODEL": "models/gemini-1.5-flash",
         "TEXT_EMBED_DIM": "3072",
         "IMAGE_EMBED_DIM": "3072",
         "FACE_EMBED_DIM": "512",
