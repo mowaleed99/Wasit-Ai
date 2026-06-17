@@ -39,8 +39,8 @@ image = (
     secrets=[Secret.from_name("gemini-secret")],
     volumes={"/data": volume},
     min_containers=0,  # Set to 0 for dev (saves cost), set to 1 for production (no cold start)
-    allow_concurrent_inputs=10
 )
+@modal.concurrent(max_inputs=10)
 @asgi_app()
 def fastapi_app():
     import os

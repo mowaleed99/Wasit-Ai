@@ -13,7 +13,7 @@
     ],
     "env": {
         "GEMINI_API_KEY": "@gemini-api-key",
-        "TEXT_EMBED_MODEL": "models/text-embedding-004",
+        "TEXT_EMBED_MODEL": "models/gemini-embedding-001",
         "MULTIMODAL_EMBED_MODEL": "models/gemini-1.5-flash",
         "TEXT_EMBED_DIM": "3072",
         "IMAGE_EMBED_DIM": "3072",
